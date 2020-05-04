@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginBottom="15dp"
+    android:background="@drawable/bg_list"
+    android:foreground="?android:selectableItemBackground"
+    android:padding="15dp"
+    tools:background="@color/colorPrimaryDark">
+
+    <TextView
+        android:id="@+id/note_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Sample Note" />
+
+    <TextView
+        android:id="@+id/note_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="#D6D6D6"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/note_title"
+        tools:text="Some text" />
+
+    <TextView
+        android:id="@+id/note_added_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="#B3B3B3"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/note_content"
+        app:layout_constraintStart_toEndOf="@+id/text_edited_on"
+        app:layout_constraintTop_toBottomOf="@+id/note_content"
+        tools:text="some date and time" />
+
+    <TextView
+        android:id="@+id/text_edited_on"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="edited on"
+        android:textColor="#B3B3B3"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/note_added_at"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@+id/note_content"
+        app:layout_constraintTop_toBottomOf="@+id/note_content" />
+</androidx.constraintlayout.widget.ConstraintLayout>
