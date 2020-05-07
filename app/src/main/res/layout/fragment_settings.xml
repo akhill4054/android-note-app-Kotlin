@@ -4,7 +4,7 @@
     android:background="@color/colorPrimaryDark"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments_main_activity.FragmentSettings">
+    tools:context=".FragmentSettings">
 
     <TextView
         android:layout_width="match_parent"

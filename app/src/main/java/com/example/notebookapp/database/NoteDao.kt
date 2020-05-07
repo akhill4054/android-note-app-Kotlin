@@ -21,7 +21,7 @@ interface NoteDao {
     @Query("DELETE FROM notebook_table")
     suspend fun clear()
 
-    @Query("SELECT * FROM notebook_table ORDER BY noteId ASC")
+    @Query("SELECT * FROM notebook_table ORDER BY noteId DESC")
     fun allNotes(): LiveData<List<Note>>
 
 }

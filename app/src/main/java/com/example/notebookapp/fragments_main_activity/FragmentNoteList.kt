@@ -1,11 +1,12 @@
 package com.example.notebookapp.fragments_main_activity
 
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -21,12 +22,17 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
 
     private lateinit var viewmodel: SharedNoteViewmodel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewmodel = ViewModelProvider(requireActivity()).get(SharedNoteViewmodel::class.java)
+        viewmodel.saveNoteFlag.value = false
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewmodel = ViewModelProvider(requireActivity()).get(SharedNoteViewmodel::class.java)
-
         // Setting click listener to action button
         requireActivity().findViewById<FloatingActionButton>(R.id.btn_action).setOnClickListener {
             findNavController().navigate(R.id.action_fragmentNoteList_to_fragmenNewNote)
@@ -53,16 +59,27 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
         notes_list.adapter = adapter
 
         viewmodel.allNotes.observe(viewLifecycleOwner, Observer {
-            notes_list.adapter = adapter
             it?.let {
                 adapter.data = it
+                adapter.notifyDataSetChanged()
             }
         })
 
         viewmodel.tempNote.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                viewmodel.insert(it)
-                viewmodel.tempNote.value = null
+            it?.let { note ->
+                viewmodel.saveNoteFlag.observe(
+                    viewLifecycleOwner,
+                    Observer {
+                        it?.let {flag ->
+                            if (flag) {
+                                // Saving note
+                                viewmodel.insert(note)
+                                viewmodel.tempNote.value = null
+                                viewmodel.saveNoteFlag.value = false
+                            }
+                        }
+                    }
+                )
             }
         })
     }

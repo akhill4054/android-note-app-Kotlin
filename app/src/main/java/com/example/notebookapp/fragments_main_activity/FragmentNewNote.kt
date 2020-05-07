@@ -39,9 +39,9 @@ class FragmentNewNote : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewmodel.tempNote.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                text_title.setText(it.title)
-                text_note.setText(it.note)
+            it?.let {note ->
+                text_title.setText(note.title)
+                text_note.setText(note.note)
             }
         })
 
@@ -73,6 +73,7 @@ class FragmentNewNote : Fragment() {
 
         // To make action button appear
         (activity as MainActivity).showActionButton()
+        viewmodel.saveNoteFlag.value = true
     }
 
 }

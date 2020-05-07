@@ -35,10 +35,6 @@ class ItemViewHolder(itemView: View, val onNoteListener: NoteAdapter.OnNoteClick
 class NoteAdapter(val onNoteListener: OnNoteClickListener): RecyclerView.Adapter<ItemViewHolder>() {
 
     var data = listOf<Note>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
 
     override fun getItemCount() = data.size
 

@@ -18,6 +18,7 @@ class SharedNoteViewmodel(application: Application): AndroidViewModel(applicatio
     val allNotes: LiveData<List<Note>>
 
     var position = -1
+    var saveNoteFlag = MutableLiveData<Boolean>()
     var tempNote = MutableLiveData<Note>()
 
     init {

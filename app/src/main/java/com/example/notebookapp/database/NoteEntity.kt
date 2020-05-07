@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDateTime
+import java.util.*
 
 
 @Entity(tableName = "notebook_table")
@@ -23,19 +24,28 @@ data class Note(
 
 fun formattedDateTimeString(): String {
     val dateTime = LocalDateTime.now()
+
     val dd = dateTime.dayOfMonth.toString()
-    val month = dateTime.month.toString()
+    var month = dateTime.month.toString()
     val yy = dateTime.year.toString()
-    val hh = dateTime.hour
+
+    var hh = dateTime.hour
     val mm = dateTime.minute
-    var time = ""
+    var post = "am"
 
-    time = if (hh > 12)
-            "${hh - 12}:${mm} pm"
-           else if (hh == 12)
-            "$hh:${mm} pm"
-           else
-            "$hh:${mm} am"
+    month = month[0] + month.slice(1 until month.length).toLowerCase(Locale.ROOT)
 
-    return "$dd $month $yy at $time"
+    if (hh == 12) post = "pm"
+    else if (hh > 12) post = "pm"; hh -= 12
+
+    val hhstr = if (hh < 10)
+                    "0${hh}"
+                else
+                    hh.toString()
+    val mmstr = if (mm < 10)
+                    "0${mm}"
+                else
+                    mm.toString()
+
+    return "$dd $month $yy at $hhstr:$mmstr $post"
 }
