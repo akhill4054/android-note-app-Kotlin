@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -37,7 +38,12 @@ class FragmentNote : Fragment() {
         // Setting up the toolbar
         val toolbar = (requireActivity() as MainActivity).toolbar
         toolbar.menu.clear()
-        toolbar.inflateMenu(R.menu.delete_menu)
+
+        if ((requireActivity() as MainActivity).isLightThemeEnabled)
+            toolbar.inflateMenu(R.menu.delete_menu_light)
+        else
+            toolbar.inflateMenu(R.menu.delete_menu_dark)
+
         toolbar.setOnMenuItemClickListener {
             // Delete current note and navigate back
             val dialogView = layoutInflater.inflate(R.layout.custom_alertdialog, null, false)

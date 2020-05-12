@@ -15,6 +15,7 @@ import com.example.notebookapp.R
 import com.example.notebookapp.database.Note
 import com.example.notebookapp.viewmodels.SharedNoteViewmodel
 import kotlinx.android.synthetic.main.fragment_note.*
+import kotlinx.android.synthetic.main.list_item_view.*
 
 
 class FragmentNewNote : Fragment() {
@@ -71,9 +72,16 @@ class FragmentNewNote : Fragment() {
     override fun onDetach() {
         super.onDetach()
 
+        // Saving note
+        viewmodel.tempNote.value?.let {note ->
+            if (note.title.isNotEmpty() || note.note.isNotEmpty()) {
+                viewmodel.insert(note)
+                viewmodel.tempNote.value = Note()
+            }
+        }
+
         // To make action button appear
         (activity as MainActivity).showActionButton()
-        viewmodel.saveNoteFlag.value = true
     }
 
 }

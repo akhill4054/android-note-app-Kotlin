@@ -1,4 +1,4 @@
-package com.example.notebookapp
+package com.example.notebookapp.fragments_main_activity
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,19 +8,18 @@ import android.view.ViewGroup
 import com.example.notebookapp.MainActivity
 
 import com.example.notebookapp.R
+import kotlinx.android.synthetic.main.activity_main.*
 
 
-class FragmentSettings : Fragment() {
+class FragmentBin : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Setting up the toolbar
-        val toolbar = (requireActivity() as MainActivity).toolbar
-        toolbar.menu.clear()
+        // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        return inflater.inflate(R.layout.fragment_bin, container, false)
     }
 
 }

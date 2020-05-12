@@ -3,5 +3,9 @@
     <color name="colorPrimary">#FF3A485A</color>
     <color name="colorPrimaryDark">#28323f</color>
     <color name="colorAccent">#4580ff</color>
+    <color name="colorAccentLight">#6494FB</color>
     <color name="darkGrey">#79889C</color>
+    <color name="lightThemeBackground">#FAFAFA</color>
+    <color name="lightSnackbarColor">#485567</color>
+    <color name="darkSnackbarColor">#151C25</color>
 </resources>

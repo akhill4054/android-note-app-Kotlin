@@ -1,11 +1,40 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <!-- Dark theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorControlHighlight">#686F77</item>
+        <!-- Hamburger icon/navigation up icon colors in toolbar -->
+        <item name="colorControlNormal">#FFFFFF</item>
+        <!-- Custom attrs -->
+        <item name="toolBarColor">@color/colorPrimary</item>
+        <item name="textColor">#FFFFFF</item>
+        <item name="lightTextColor">#DBDFE3</item>
+        <item name="veryLightTextColor">#989EA5</item>
+        <item name="backgroundColor">#28323F</item>
+        <item name="borderColor">#898D93</item>
+        <item name="buttonColor">@color/colorAccent</item>
+    </style>
+
+    <!-- Light theme -->
+    <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/lightThemeBackground</item>
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorControlHighlight">#C0CCDC</item>
+        <!-- Hamburger icon/navigation up icon colors in toolbar -->
+        <item name="colorControlNormal">@color/colorPrimaryDark</item>
+        <!-- Custom attrs -->
+        <item name="toolBarColor">@color/lightThemeBackground</item>
+        <item name="textColor">#000000</item>
+        <item name="lightTextColor">#3A3A40</item>
+        <item name="veryLightTextColor">#6D6D81</item>
+        <item name="backgroundColor">@color/lightThemeBackground</item>
+        <item name="borderColor">#8C939C</item>
+        <item name="buttonColor">@color/colorAccent</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -25,5 +54,14 @@
     <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="settings_text_group_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 
 </resources>

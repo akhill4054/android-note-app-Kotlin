@@ -18,6 +18,9 @@ interface NoteDao {
     @Query("SELECT * from notebook_table WHERE noteId = :key")
     suspend fun get(key: Long): Note
 
+    @Query("SELECT * FROM notebook_table ORDER BY noteID DESC LIMIT 1")
+    suspend fun recent(): Note
+
     @Query("DELETE FROM notebook_table")
     suspend fun clear()
 

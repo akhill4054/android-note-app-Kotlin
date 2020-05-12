@@ -1,7 +1,6 @@
 package com.example.notebookapp.fragments_main_activity
 
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +14,7 @@ import com.example.notebookapp.NoteAdapter
 import com.example.notebookapp.R
 import com.example.notebookapp.viewmodels.SharedNoteViewmodel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_notes.*
 
 
@@ -26,7 +26,6 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
         super.onCreate(savedInstanceState)
 
         viewmodel = ViewModelProvider(requireActivity()).get(SharedNoteViewmodel::class.java)
-        viewmodel.saveNoteFlag.value = false
     }
 
     override fun onCreateView(
@@ -41,13 +40,6 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
         // Setting up the toolbar
         val toolbar = (requireActivity() as MainActivity).toolbar
         toolbar.menu.clear()
-        toolbar.inflateMenu(R.menu.main_menu)
-        toolbar.setOnMenuItemClickListener { item ->
-            if (item.itemId == R.id.settings) {
-                findNavController().navigate(R.id.action_fragmentNoteList_to_fragmentSettings)
-                true
-            } else false
-        }
 
         return inflater.inflate(R.layout.fragment_notes, container, false)
     }
@@ -64,24 +56,13 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
                 adapter.notifyDataSetChanged()
             }
         })
+    }
 
-        viewmodel.tempNote.observe(viewLifecycleOwner, Observer {
-            it?.let { note ->
-                viewmodel.saveNoteFlag.observe(
-                    viewLifecycleOwner,
-                    Observer {
-                        it?.let {flag ->
-                            if (flag) {
-                                // Saving note
-                                viewmodel.insert(note)
-                                viewmodel.tempNote.value = null
-                                viewmodel.saveNoteFlag.value = false
-                            }
-                        }
-                    }
-                )
-            }
-        })
+    override fun onStart() {
+        super.onStart()
+
+        // Making notes option selected on nav_view menu
+        (requireActivity() as MainActivity).nav_view.setCheckedItem(R.id.fragmentNoteList)
     }
 
     override fun onNoteClick(position: Int) {
