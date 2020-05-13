@@ -10,12 +10,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
+import com.example.notebookapp.fragments_main_activity.FragmentNoteList
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var actionButton: FloatingActionButton
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var toolbar: Toolbar
+    lateinit var overlayToolbar: Toolbar
     lateinit var prefs: SharedPreferences
     var isLightThemeEnabled = false
 
@@ -44,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph, drawer_layout)
 
         toolbar = findViewById(R.id.toolbar)
+        overlayToolbar = findViewById(R.id.overlay_toolbar)
         toolbar.setupWithNavController(navController, appBarConfiguration)
 
         val navView = findViewById<NavigationView>(R.id.nav_view)
@@ -62,8 +67,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        val navController = findNavController(R.id.nav_host_fragment)
+
+        navHost?.let { navFragment ->
+            // Handling list selection cancellation
+            navFragment.childFragmentManager.primaryNavigationFragment?.let {fragment->
+                navController.currentDestination?.id.let {id ->
+                    if (id == R.id.fragmentNoteList) {
+                        val fragmentNoteList = fragment as FragmentNoteList
+                        if (fragmentNoteList.isSelectionOn) {
+                            fragmentNoteList.cancelSelection()
+                            return
+                        }
+                    } else if (id == R.id.fragmentArchive) {
+
+
+                    } else if (id == R.id.fragmentBin) {
+
+                    }
+                }
+            }
+        }
+
+        super.onBackPressed()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
+
         return super.onOptionsItemSelected(item) || item.onNavDestinationSelected(navController)
     }
 

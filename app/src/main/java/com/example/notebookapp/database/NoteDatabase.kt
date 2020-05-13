@@ -28,7 +28,7 @@ abstract class NoteDatabase: RoomDatabase() {
 
                     noteDao.clear()
 
-                    for (i in 1..10)
+                    for (i in 1..20)
                         noteDao.insert(
                             Note(
                                 title = "Sample note $i",

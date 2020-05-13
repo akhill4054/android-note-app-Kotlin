@@ -26,6 +26,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:titleTextColor="?attr/textColor" />
 
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/overlay_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/darkSnackbarColor"
+                android:visibility="gone"
+                android:elevation="5dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:titleTextColor="@color/lightThemeBackground" />
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btn_action"
                 android:layout_width="wrap_content"
@@ -60,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="?attr/backgroundColor"
-        app:itemIconTint="?attr/lightTextColor"
+        app:itemIconTint="?attr/veryLightTextColor"
         app:itemTextColor="?attr/textColor"
         android:id="@+id/nav_view"
         android:layout_gravity="start"

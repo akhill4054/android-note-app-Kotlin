@@ -17,9 +17,18 @@ class SharedNoteViewmodel(application: Application): AndroidViewModel(applicatio
     private val repository: NoteRepository
     val allNotes: LiveData<List<Note>>
 
+    // Opened note position
     var position = -1
+
+    // Saving note
     var saveNoteFlag = MutableLiveData<Boolean>()
     var tempNote = MutableLiveData<Note>()
+
+    // Selection stuff!
+    var isSelectionOn = false
+    var isAllSelected = false
+    var selectedItemPositions = Array(0) { 0 }
+    var selectionCount = 0
 
     init {
         val noteDao = NoteDatabase.getInstance(application, viewModelScope).noteDao

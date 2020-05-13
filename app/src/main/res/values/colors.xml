@@ -8,4 +8,6 @@
     <color name="lightThemeBackground">#FAFAFA</color>
     <color name="lightSnackbarColor">#485567</color>
     <color name="darkSnackbarColor">#151C25</color>
+    <color name="darkToolbarColor">@color/colorPrimary</color>
+    <color name="lightToolbarColor">@color/lightThemeBackground</color>
 </resources>
