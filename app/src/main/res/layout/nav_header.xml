@@ -9,10 +9,9 @@
         android:id="@+id/imageView"
         android:layout_width="75dp"
         android:layout_height="match_parent"
-        android:tint="?attr/lightTextColor"
         android:paddingStart="25dp"
         android:scaleType="centerInside"
-        app:srcCompat="@drawable/ic_ac_unit_black_24dp" />
+        app:srcCompat="@drawable/ic_launcher_note" />
 
     <TextView
         android:id="@+id/text_header"
