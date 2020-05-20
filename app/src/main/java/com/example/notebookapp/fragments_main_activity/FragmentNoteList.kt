@@ -1,32 +1,32 @@
 package com.example.notebookapp.fragments_main_activity
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.notebookapp.MainActivity
-import com.example.notebookapp.NoteAdapter
-import com.example.notebookapp.R
+import androidx.navigation.ui.setupWithNavController
+import com.example.notebookapp.*
 import com.example.notebookapp.viewmodels.SharedNoteViewmodel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_notes.*
 
+const val SCROLL_POSITION = "SCROLL_POSITION"
 
-class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
+
+class FragmentNoteList : Fragment(), OnNoteClickListener {
 
     private lateinit var viewmodel: SharedNoteViewmodel
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var overlayToolbar: androidx.appcompat.widget.Toolbar
-    private lateinit var adapter: NoteAdapter
+    private lateinit var listAdapter: NoteListAdapter
 
     // List item selection stuff
     var isSelectionOn = false
@@ -49,11 +49,22 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
                 cancelSelection()
 
             findNavController().navigate(R.id.action_fragmentNoteList_to_fragmenNewNote)
+
+            viewmodel.shouldRequestFocus.value = true
         }
+
+        // To make action button appear
+        (activity as MainActivity).showActionButton()
 
         // Setting up the toolbar
         toolbar = (requireActivity() as MainActivity).toolbar
         toolbar.menu.clear()
+
+        // Reverting toolbar configuration (In case if it was changed in NewNoteFragment)
+        toolbar.setupWithNavController(
+            findNavController(),
+            (requireActivity() as MainActivity).appBarConfiguration
+        )
 
         overlayToolbar = (requireActivity() as MainActivity).overlayToolbar
 
@@ -63,12 +74,12 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = NoteAdapter(this)
-        notes_list.adapter = adapter
+        listAdapter = NoteListAdapter(this)
+        notes_list.adapter = listAdapter
 
         if (viewmodel.isSelectionOn) {
             // Restoring selection state
-            adapter.selectedItemPositions = viewmodel.selectedItemPositions
+            listAdapter.selectedItemPositions = viewmodel.selectedItemPositions
             selectionCount = viewmodel.selectionCount
             turnOnSelection()
             if (viewmodel.isAllSelected) {
@@ -79,9 +90,14 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
 
         viewmodel.allNotes.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.data = it
+                listAdapter.data = it
             }
         })
+
+        // Getting back scroll position
+        savedInstanceState?.run {
+            test(getInt(SCROLL_POSITION).toString())
+        }
     }
 
     override fun onStart() {
@@ -91,6 +107,15 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
         (requireActivity() as MainActivity).nav_view.setCheckedItem(R.id.fragmentNoteList)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        // Saving scroll position, just in case
+        outState.run {
+            putInt(SCROLL_POSITION, 12)
+        }
+    }
+
     override fun onDetach() {
         super.onDetach()
 
@@ -98,7 +123,7 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
             // Preserving selection state in viewmodel
             viewmodel.isSelectionOn = true
             viewmodel.isAllSelected = isAllSelected
-            viewmodel.selectedItemPositions = adapter.selectedItemPositions
+            viewmodel.selectedItemPositions = listAdapter.selectedItemPositions
             viewmodel.selectionCount = selectionCount
         }
     }
@@ -116,18 +141,18 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
     override fun onLongClick(position: Int) {
         if (!isSelectionOn) {
             turnOnSelection()
-            adapter.selectedItemPositions = Array(adapter.data.size) { -1 }
-            adapter.isSelectionOn = true
+            listAdapter.selectedItemPositions = Array(listAdapter.data.size) { -1 }
+            listAdapter.isSelectionOn = true
         }
         selectItem(position)
     }
 
     private fun selectItem(position: Int) {
         // Selection stuff!
-        adapter.selectedItemPositions[position] =
-            if (adapter.selectedItemPositions[position] == -1) {
+        listAdapter.selectedItemPositions[position] =
+            if (listAdapter.selectedItemPositions[position] == -1) {
                 selectionCount++
-                if (selectionCount == adapter.data.size)
+                if (selectionCount == listAdapter.data.size)
                     enableAllSelected()
                 1
             } else {
@@ -143,7 +168,7 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
 
         updateSelectionCountText()
 
-        adapter.notifyItemChanged(position)
+        listAdapter.notifyItemChanged(position)
         if (selectionCount == 0) {
             cancelSelection()
         }
@@ -151,7 +176,7 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
 
     private fun turnOnSelection() {
         isSelectionOn = true
-        adapter.isSelectionOn = true
+        listAdapter.isSelectionOn = true
 
         // Locking nav drawer
         (requireActivity() as MainActivity).drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
@@ -171,10 +196,40 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
                         enableAllSelected()
                 }
                 R.id.delete_selection -> {
-                    TODO("Move to bin selected items here.")
+                    // Moving selection to bin
+                    var i = 0
+                    for (flag in listAdapter.selectedItemPositions) {
+                        if (flag == 1) {
+                            val note = listAdapter.data[i]
+                            viewmodel.remove(note)
+                            viewmodel.bin(note)
+                            i++
+                        }
+                    }
+
+                    listAdapter.notifyDataSetChanged()
+                    cancelSelection()
+
+                    // Showing a snackbar
+                    showSnackbar("Moved to bin")
                 }
                 R.id.archive_selection -> {
-                    TODO("Archive selected items here.")
+                    // Moving selection to bin
+                    var i = 0
+                    for (flag in listAdapter.selectedItemPositions) {
+                        if (flag == 1) {
+                            val note = listAdapter.data[i]
+                            viewmodel.remove(note)
+                            viewmodel.archive(note)
+                            i++
+                        }
+                    }
+
+                    listAdapter.notifyDataSetChanged()
+                    cancelSelection()
+
+                    // Showing a snackbar
+                    showSnackbar("Moved to archive")
                 }
                 else ->
                     cancelSelection()
@@ -200,19 +255,32 @@ class FragmentNoteList : Fragment(), NoteAdapter.OnNoteClickListener {
         isAllSelected = false
         isSelectionOn = false
         selectionCount = 0
-        adapter.isSelectionOn = false
-        adapter.notifyDataSetChanged()
+        listAdapter.isSelectionOn = false
+        listAdapter.notifyDataSetChanged()
         viewmodel.isSelectionOn = false
     }
 
     private fun enableAllSelected() {
         isAllSelected = true
         overlayToolbar.menu.getItem(0).setIcon(R.drawable.ic_check_box_white_24dp)
-        selectionCount = adapter.data.size
-        adapter.selectedItemPositions = Array(adapter.data.size) { 1 }
-        adapter.notifyDataSetChanged()
+        selectionCount = listAdapter.data.size
+        listAdapter.selectedItemPositions = Array(listAdapter.data.size) { 1 }
+        listAdapter.notifyDataSetChanged()
 
         updateSelectionCountText()
+    }
+
+    private fun showSnackbar(msg: String) {
+        val snackbar = Snackbar.make(
+            (requireActivity() as MainActivity).main_activity_parent,
+            msg,
+            Snackbar.LENGTH_SHORT
+        )
+        val sbView = snackbar.view
+        sbView.setBackgroundColor(
+            ContextCompat.getColor(requireContext(), R.color.darkSnackbarColor)
+        )
+        snackbar.show()
     }
 
 }

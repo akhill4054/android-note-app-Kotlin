@@ -40,6 +40,8 @@
                 android:id="@+id/btn_action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                tools:visibility="visible"
+                android:visibility="gone"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="24dp"
                 android:background="?selectableItemBackground"
@@ -75,6 +77,6 @@
         android:id="@+id/nav_view"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_drawer_items"/>
+        app:menu="@menu/nav_items"/>
     
 </androidx.drawerlayout.widget.DrawerLayout>

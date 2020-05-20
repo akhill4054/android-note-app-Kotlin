@@ -10,31 +10,42 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-@Database(entities = [Note::class], version = 1, exportSchema = false)
-abstract class NoteDatabase: RoomDatabase() {
+@Database(
+    entities = [Note::class, BinNote::class, ArchiveNote::class],
+    version = 2,
+    exportSchema = false
+)
+abstract class NoteDatabase : RoomDatabase() {
 
     abstract val noteDao: NoteDao
+    abstract val binDao: BinDao
+    abstract val archiveDao: ArchiveDao
 
     class NoteDatabaseCallback(
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
 
-        override fun onOpen(db: SupportSQLiteDatabase) {
+        override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
 
             INSTANCE?.let { database ->
                 scope.launch(Dispatchers.IO) {
                     val noteDao = database.noteDao
+                    val archiveDao = database.archiveDao
+                    val binDao = database.binDao
 
                     noteDao.clear()
+                    archiveDao.clear()
+                    binDao.clear()
 
-                    for (i in 1..20)
+                    for (i in 1..10) {
                         noteDao.insert(
                             Note(
                                 title = "Sample note $i",
                                 note = "This is sample note $i"
                             )
                         )
+                    }
                 }
             }
         }
@@ -47,7 +58,8 @@ abstract class NoteDatabase: RoomDatabase() {
 
         fun getInstance(
             context: Context,
-            scope: CoroutineScope): NoteDatabase {
+            scope: CoroutineScope
+        ): NoteDatabase {
             val tempInstance = INSTANCE
             if (tempInstance != null) {
                 return tempInstance
@@ -58,8 +70,9 @@ abstract class NoteDatabase: RoomDatabase() {
                     NoteDatabase::class.java,
                     "note_database"
                 )
-                .addCallback(NoteDatabaseCallback(scope))
-                .build()
+                    .addCallback(NoteDatabaseCallback(scope))
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 return instance
             }

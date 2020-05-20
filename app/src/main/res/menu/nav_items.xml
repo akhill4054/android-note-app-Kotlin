@@ -2,11 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:snowIn="navigation_view">
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/group_divider1"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/fragmentNoteList"
             android:icon="@drawable/ic_list_black_24dp"
             android:title="Notes" />
+    </group>
+    <group
+        android:id="@+id/group_divider2"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/fragmentArchive"
             android:icon="@drawable/ic_archive_white_24dp"
@@ -17,10 +23,10 @@
             android:title="Bin" />
     </group>
     <group
-        android:id="@+id/group_divider"
+        android:id="@+id/group_divider3"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/settingsActivity"
+            android:id="@+id/fragmentSettings"
             android:icon="@drawable/ic_settings_white_24dp"
             android:title="Settings" />
     </group>

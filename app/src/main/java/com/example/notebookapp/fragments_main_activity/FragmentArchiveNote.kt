@@ -1,6 +1,5 @@
 package com.example.notebookapp.fragments_main_activity
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,22 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.notebookapp.MainActivity
 import com.example.notebookapp.R
-import com.example.notebookapp.database.Note
+import com.example.notebookapp.database.ArchiveNote
 import com.example.notebookapp.hideKeyboard
-import com.example.notebookapp.test
-import com.example.notebookapp.viewmodels.SharedNoteViewmodel
+import com.example.notebookapp.viewmodels.ArchiveViewmodel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_note.*
 
 
-class FragmentNote : Fragment() {
+class FragmentArchiveNote : Fragment() {
 
-    private lateinit var viewmodel: SharedNoteViewmodel
-    private lateinit var note: Note
+    private lateinit var viewmodel: ArchiveViewmodel
+    private lateinit var note: ArchiveNote
     private var hasClickedOnMenuItem = false
 
     override fun onCreateView(
@@ -37,7 +36,7 @@ class FragmentNote : Fragment() {
         toolbar.menu.clear()
 
         // Toolbar menu
-        toolbar.inflateMenu(R.menu.edit_note_menu)
+        toolbar.inflateMenu(R.menu.archive_note_menu)
 
         toolbar.setOnMenuItemClickListener { item ->
             // Setting up our snackbar
@@ -73,45 +72,29 @@ class FragmentNote : Fragment() {
 
                     // Undo remove action!
                     snackbar.setAction("undo") {
-                        viewmodel.removeFromBin(note.noteId)
                         viewmodel.insert(note)
+                        viewmodel.removeFromBin(note.noteId)
                     }
                         .setText("Moved to bin")
                         .show()
-                } R.id.archive -> {
+                }
+                else -> {
                     hasClickedOnMenuItem = true
 
-                    viewmodel.archive(note)
                     viewmodel.remove(note)
+                    viewmodel.unarchive(note)
 
                     findNavController().navigateUp()
 
                     // Undo archive action!
                     snackbar.setAction("undo") {
-                        viewmodel.removeFromArchive(note.noteId)
+                        viewmodel.removeFromNote(note.noteId)
                         viewmodel.insert(note)
                     }
-                        .setText("Note archived")
+                        .setText("Note unarchived")
                         .show()
-                } else -> {
-                    val sendIntent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(
-                            Intent.EXTRA_TEXT,
-                            if (note.title.isNotEmpty()) {
-                                "${note.title}\n${note.note}"
-                            }
-                            else
-                                note.title + note.note
-                        )
-                        type = "text/plain"
-                    }
-
-                    val shareIntent = Intent.createChooser(sendIntent, null)
-                    startActivity(shareIntent)
                 }
             }
-
             true
         }
 
@@ -121,10 +104,10 @@ class FragmentNote : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewmodel = ViewModelProvider(requireActivity()).get(SharedNoteViewmodel::class.java)
+        viewmodel = ViewModelProvider(requireActivity()).get(ArchiveViewmodel::class.java)
 
         // Get note from viewmodel and set it's content in view
-        note = viewmodel.allNotes.value!![viewmodel.position]
+        note = viewmodel.allArchiveNotes.value!![viewmodel.position]
         text_title.setText(note.title)
         text_note.setText(note.note)
     }
@@ -161,7 +144,7 @@ class FragmentNote : Fragment() {
     }
 
     private fun updateNote(titleText: String, noteText: String) {
-        note = Note(
+        note = ArchiveNote(
             noteId = note.noteId,
             title = titleText,
             note = noteText

@@ -3,6 +3,7 @@ package com.example.notebookapp
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -15,16 +16,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
+import com.example.notebookapp.fragments_main_activity.FragmentArchive
+import com.example.notebookapp.fragments_main_activity.FragmentBin
+import com.example.notebookapp.fragments_main_activity.FragmentNewNote
 import com.example.notebookapp.fragments_main_activity.FragmentNoteList
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
+const val PREFS_FILENAME = "com.example.notebook.prefs"
+const val LIGHT_THEME_KEY = "LIGHT_THEME"
+const val THEME_CHANGED = "THEME_CHANGED"
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var actionButton: FloatingActionButton
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var toolbar: Toolbar
     lateinit var overlayToolbar: Toolbar
     lateinit var prefs: SharedPreferences
@@ -54,16 +62,10 @@ class MainActivity : AppCompatActivity() {
         val navView = findViewById<NavigationView>(R.id.nav_view)
 
         navView.setupWithNavController(navController)
-    }
 
-    override fun onRestart() {
-        super.onRestart()
-
-        if (isLightThemeEnabled != prefs.getBoolean(LIGHT_THEME_KEY, false)) {
-            Intent(this, MainActivity::class.java).let {
-                finish()
-                startActivity(it)
-            }
+        if (intent.getBooleanExtra(THEME_CHANGED, false)) {
+            findNavController(R.id.nav_host_fragment).navigate(R.id.fragmentSettings)
+            navView.setCheckedItem(R.id.fragmentSettings)
         }
     }
 
@@ -81,11 +83,22 @@ class MainActivity : AppCompatActivity() {
                             fragmentNoteList.cancelSelection()
                             return
                         }
+                    } else if (id == R.id.fragmentNewNote) {
+                        val fragmentNewNote = fragment as FragmentNewNote
+                        // Saving note on back press
+                        fragmentNewNote.saveNote()
                     } else if (id == R.id.fragmentArchive) {
-
-
+                        val fragmentArchive = fragment as FragmentArchive
+                        if (fragmentArchive.adapter.isSelectionOn) {
+                            fragmentArchive.canceLSelection()
+                            return
+                        }
                     } else if (id == R.id.fragmentBin) {
-
+                        val fragmentBin = fragment as FragmentBin
+                        if (fragmentBin.adapter.isSelectionOn) {
+                            fragmentBin.canceLSelection()
+                            return
+                        }
                     }
                 }
             }
@@ -137,6 +150,14 @@ class MainActivity : AppCompatActivity() {
     fun hideActionButton() {
         actionButton.isClickable = false
         actionButton.visibility = View.INVISIBLE
+    }
+
+    fun changeTheme() {
+        finish()
+        Intent(this, MainActivity::class.java).let {
+            it.putExtra(THEME_CHANGED, true)
+            startActivity(it)
+        }
     }
 
 }
