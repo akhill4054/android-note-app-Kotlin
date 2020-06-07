@@ -15,7 +15,7 @@ class ArchiveRepository(private val archiveDao: ArchiveDao) {
             noteId = note.noteId,
             title = note.title,
             note = note.note,
-            dateTime = note.dateTime
+            lastModified = note.lastModified
         )
 
         archiveDao.insert(archiveNote)

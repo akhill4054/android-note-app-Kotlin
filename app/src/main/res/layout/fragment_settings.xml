@@ -53,7 +53,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:text="My name is Akhil and I'm just a college student. I made this app just for fun alongside learning some cool android fundamentals and libraries."
+            android:text="@string/settings_about"
             android:textColor="?attr/textColor"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"

@@ -45,7 +45,7 @@ class ArchiveViewmodel(application: Application): AndroidViewModel(application) 
             noteId = archiveNote.noteId,
             title = archiveNote.title,
             note = archiveNote.note,
-            dateTime = archiveNote.dateTime
+            lastModified = archiveNote.lastModified
         )
 
         noteRepository.insert(note)
@@ -78,7 +78,7 @@ class ArchiveViewmodel(application: Application): AndroidViewModel(application) 
                 noteId = archiveNote.noteId,
                 title = archiveNote.title,
                 note = archiveNote.note,
-                dateTime = archiveNote.dateTime
+                lastModified = archiveNote.lastModified
             )
         )
     }

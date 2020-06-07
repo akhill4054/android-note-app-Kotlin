@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".fragments_main_activity.FragmentNewNote">
 
-    <com.example.notebookapp.views.TextInput
+    <com.example.notebookapp.widgets.TextInput
         android:id="@+id/text_note"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:autofillHints="Note?"
         android:background="@null"
         android:gravity="start"
@@ -22,14 +22,13 @@
         android:scrollbars="vertical"
         android:textColor="?attr/textColor"
         android:textColorHint="?attr/veryLightTextColor"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/text_edited_on"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_title"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/text_title" />
 
-    <com.example.notebookapp.views.TextInput
+    <com.example.notebookapp.widgets.TextInput
         android:id="@+id/text_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -47,5 +46,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_edited_on"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:textSize="14sp"
+        android:textColor="?attr/veryLightTextColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="edited on" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

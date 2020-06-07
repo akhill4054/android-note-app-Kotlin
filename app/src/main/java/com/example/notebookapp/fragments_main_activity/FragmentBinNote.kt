@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.notebookapp.MainActivity
 
@@ -31,13 +30,13 @@ class FragmentBinNote : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         snackbar = Snackbar.make(
-            (requireActivity() as MainActivity).main_activity_parent,
+            (requireActivity() as MainActivity).parent_layout,
             "Note cannot be edited inside bin",
             Snackbar.LENGTH_SHORT
         )
         val sbView = snackbar.view
         snackbar.view.setBackgroundColor(
-            ContextCompat.getColor(requireContext(), R.color.darkSnackbarColor)
+            ContextCompat.getColor(requireContext(), R.color.darkSnackBarColor)
         )
 
         viewmodel = ViewModelProvider(requireActivity()).get(BinViewmodel::class.java)
@@ -47,19 +46,33 @@ class FragmentBinNote : Fragment() {
         (requireActivity() as MainActivity).toolbar.run {
             menu.clear()
             inflateMenu(R.menu.bin_note_menu)
-            setOnMenuItemClickListener {
-                viewmodel.remove(note)
-                viewmodel.restore(note)
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.delete -> {
+                        // Delete the note forver
+                        viewmodel.remove(note)
+
+                        snackbar.setText("Deleted note forever")
+                            .setAction("Undo") {
+                                viewmodel.insert(note)
+                            }
+                            .show()
+                    }
+                    else -> {
+                        // Restore note
+                        viewmodel.remove(note)
+                        viewmodel.restore(note)
+
+                        snackbar.setText("Restored note")
+                            .setAction("Undo") {
+                                viewmodel.removeFromNote(note.noteId)
+                                viewmodel.insert(note)
+                            }
+                            .show()
+                    }
+                }
 
                 navigateUp()
-
-                snackbar.setText("Restored note")
-                    .setAction("Undo") {
-                        viewmodel.removeFromNote(note.noteId)
-                        viewmodel.insert(note)
-                    }
-                    .show()
-
                 true
             }
         }

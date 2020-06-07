@@ -1,9 +1,12 @@
 package com.example.notebookapp
 
+import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notebookapp.database.ArchiveNote
 import com.example.notebookapp.database.BinNote
@@ -50,26 +53,29 @@ class ItemViewHolder(itemView: View, val onNoteListListener: OnNoteClickListener
 
 
 class NoteListAdapter(val onNoteListener: OnNoteClickListener) :
-    RecyclerView.Adapter<ItemViewHolder>() {
+    ListAdapter<Note, ItemViewHolder>(NoteDiffCallback()) {
 
     var isSelectionOn = false
 
-    var data = listOf<Note>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+//    var data = listOf<Note>()
+//        set(value) {
+//            field = value
+//            notifyDataSetChanged()
+//        }
 
     var selectedItemPositions = Array(0) { -1 }
 
-    override fun getItemCount() = data.size
+//    override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val item = data[position]
+//        val item = data[position]
+        val item = getItem(position)
 
         holder.noteTitle.text = item.title
         holder.noteContent.text = item.note
-        holder.noteAddedAt.text = item.dateTime
+
+        val date = item.lastModified
+        holder.noteAddedAt.text = SimpleDateFormat("MMM dd").format(date)
 
         if (item.title.length == 0) {
             holder.noteTitle.visibility = View.GONE
@@ -95,18 +101,29 @@ class NoteListAdapter(val onNoteListener: OnNoteClickListener) :
 
 }
 
+class NoteDiffCallback: DiffUtil.ItemCallback<Note>() {
+    override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
+        return oldItem.noteId == newItem.noteId
+    }
+
+    override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
+        return oldItem == newItem
+    }
+}
+
 class BinListAdapter(val onNoteListener: OnNoteClickListener) :
     RecyclerView.Adapter<ItemViewHolder>() {
 
     var isSelectionOn = false
+    var isAllSelected = false
+    var selectionCount = 0
+    var selectedItemPositions = Array(0) { 0 }
 
     var data = listOf<BinNote>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-
-    var selectedItemPositions = Array(0) { -1 }
 
     override fun getItemCount() = data.size
 
@@ -115,7 +132,7 @@ class BinListAdapter(val onNoteListener: OnNoteClickListener) :
 
         holder.noteTitle.text = item.title
         holder.noteContent.text = item.note
-        holder.noteAddedAt.text = item.dateTime
+        holder.noteAddedAt.text = item.lastModified.toString()
 
         if (item.title.length == 0) {
             holder.noteTitle.visibility = View.GONE
@@ -128,7 +145,7 @@ class BinListAdapter(val onNoteListener: OnNoteClickListener) :
             holder.noteContent.visibility = View.VISIBLE
         }
 
-        if (isSelectionOn && selectedItemPositions[position] == 1) {
+        if (isAllSelected || (isSelectionOn && selectedItemPositions[position] == 1)) {
             holder.rootView.setBackgroundResource(R.drawable.selected_ripple)
         } else {
             holder.rootView.setBackgroundResource(R.drawable.ripple)
@@ -145,14 +162,15 @@ class ArchiveListAdapter(val onNoteListener: OnNoteClickListener) :
     RecyclerView.Adapter<ItemViewHolder>() {
 
     var isSelectionOn = false
+    var isAllSelected = false
+    var selectionCount = 0
+    var selectedItemPositions = Array(0) { 0 }
 
     var data = listOf<ArchiveNote>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-
-    var selectedItemPositions = Array(0) { -1 }
 
     override fun getItemCount() = data.size
 
@@ -161,7 +179,7 @@ class ArchiveListAdapter(val onNoteListener: OnNoteClickListener) :
 
         holder.noteTitle.text = item.title
         holder.noteContent.text = item.note
-        holder.noteAddedAt.text = item.dateTime
+        holder.noteAddedAt.text = item.lastModified.toString()
 
         if (item.title.length == 0) {
             holder.noteTitle.visibility = View.GONE
@@ -174,7 +192,7 @@ class ArchiveListAdapter(val onNoteListener: OnNoteClickListener) :
             holder.noteContent.visibility = View.VISIBLE
         }
 
-        if (isSelectionOn && selectedItemPositions[position] == 1) {
+        if (isAllSelected || (isSelectionOn && selectedItemPositions[position] == 1)) {
             holder.rootView.setBackgroundResource(R.drawable.selected_ripple)
         } else {
             holder.rootView.setBackgroundResource(R.drawable.ripple)

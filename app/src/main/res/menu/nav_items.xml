@@ -15,11 +15,11 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/fragmentArchive"
-            android:icon="@drawable/ic_archive_white_24dp"
+            android:icon="@drawable/ic_archive_24dp"
             android:title="Archive" />
         <item
             android:id="@+id/fragmentBin"
-            android:icon="@drawable/ic_delete_white_24dp"
+            android:icon="@drawable/ic_delete_24dp"
             android:title="Bin" />
     </group>
     <group
@@ -27,7 +27,7 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/fragmentSettings"
-            android:icon="@drawable/ic_settings_white_24dp"
+            android:icon="@drawable/ic_settings_24dp"
             android:title="Settings" />
     </group>
 

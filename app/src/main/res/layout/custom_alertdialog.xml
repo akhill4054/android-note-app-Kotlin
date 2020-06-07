@@ -1,56 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:background="?backgroundColor">
 
     <TextView
-        android:id="@+id/alert_message"
-        android:layout_margin="15dp"
+        android:id="@+id/alert_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:layout_marginTop="16dp"
         android:text="Are you sure?"
         android:textColor="?attr/textColor"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/alert_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/alert_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="This action can't be undone!"
+        android:textColor="?attr/lightTextColor"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alert_title" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:paddingRight="15dp"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="right"
+        android:orientation="horizontal"
+        android:paddingRight="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alert_message">
+        app:layout_constraintTop_toBottomOf="@+id/alert_description">
 
         <TextView
             android:id="@+id/positive_buttton"
-            android:padding="10dp"
-            android:textAlignment="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:background="?selectableItemBackground"
+            android:padding="10dp"
             android:text="Delete"
+            android:textAlignment="center"
             android:textColor="#ff5e5e"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/negative_buttton"
-            android:padding="10dp"
-            android:textAlignment="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:background="?selectableItemBackground"
+            android:padding="10dp"
             android:text="Cancel"
+            android:textAlignment="center"
             android:textColor="?attr/textColor"
             android:textSize="16sp" />
 

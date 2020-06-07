@@ -2,14 +2,10 @@ package com.example.notebookapp.fragments_main_activity
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,13 +15,8 @@ import com.example.notebookapp.MainActivity
 import com.example.notebookapp.R
 import com.example.notebookapp.database.Note
 import com.example.notebookapp.hideKeyboard
-import com.example.notebookapp.test
 import com.example.notebookapp.viewmodels.SharedNoteViewmodel
-import com.example.notebookapp.views.TextInput
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_note.*
-import kotlinx.android.synthetic.main.list_item_view.*
 
 
 class FragmentNewNote : Fragment() {

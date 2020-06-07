@@ -4,17 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
+import java.util.*
 
 @Database(
     entities = [Note::class, BinNote::class, ArchiveNote::class],
-    version = 2,
+    version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class NoteDatabase : RoomDatabase() {
 
     abstract val noteDao: NoteDao
@@ -38,7 +40,7 @@ abstract class NoteDatabase : RoomDatabase() {
                     archiveDao.clear()
                     binDao.clear()
 
-                    for (i in 1..10) {
+                    for (i in 10 downTo 1) {
                         noteDao.insert(
                             Note(
                                 title = "Sample note $i",

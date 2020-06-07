@@ -4,7 +4,7 @@
     <!-- Dark theme -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorControlHighlight">#686F77</item>
         <!-- Hamburger icon/navigation up icon colors in toolbar -->
@@ -17,6 +17,23 @@
         <item name="backgroundColor">#28323F</item>
         <item name="borderColor">#898D93</item>
         <item name="buttonColor">@color/colorAccent</item>
+
+        <!-- Action mode stuff! -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_close_24dp</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+    </style>
+
+    <style name="SplashScreen" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
+    <!-- Action mode stuff! -->
+    <style name="Widget.App.ActionMode" parent="Widget.AppCompat.ActionMode">
+        <item name="titleTextStyle">?attr/textAppearanceHeadline6</item>
+        <item name="subtitleTextStyle">?attr/textAppearanceSubtitle1</item>
+        <item name="background">@color/darkSnackBarColor</item>
     </style>
 
     <!-- Light theme -->
@@ -35,6 +52,12 @@
         <item name="backgroundColor">@color/lightThemeBackground</item>
         <item name="borderColor">#8C939C</item>
         <item name="buttonColor">@color/colorAccent</item>
+
+        <!-- Action mode stuff! -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_close_24dp</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -63,5 +86,4 @@
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textSize">16sp</item>
     </style>
-
 </resources>

@@ -45,7 +45,8 @@ class FragmentSettings : Fragment() {
                 editor.putBoolean(LIGHT_THEME_KEY, false)
             }
             editor.apply()
-            (requireActivity() as MainActivity).changeTheme()
+//            (requireActivity() as MainActivity).changeTheme()
+            activity?.recreate()
         }
     }
 

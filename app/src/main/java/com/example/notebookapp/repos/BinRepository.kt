@@ -12,7 +12,7 @@ class BinRepository(private val binDao: BinDao) {
             noteId = note.noteId,
             title = note.title,
             note = note.note,
-            dateTime = note.dateTime
+            lastModified = note.lastModified
         )
         binDao.insert(binNote)
     }

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.notebookapp.MainActivity
 import com.example.notebookapp.R
@@ -41,13 +40,13 @@ class FragmentArchiveNote : Fragment() {
         toolbar.setOnMenuItemClickListener { item ->
             // Setting up our snackbar
             val snackbar = Snackbar.make(
-                (requireActivity() as MainActivity).main_activity_parent,
+                (requireActivity() as MainActivity).parent_layout,
                 "",
                 Snackbar.LENGTH_SHORT
             )
             val sbView = snackbar.view
             sbView.setBackgroundColor(
-                ContextCompat.getColor(requireContext(), R.color.darkSnackbarColor)
+                ContextCompat.getColor(requireContext(), R.color.darkSnackBarColor)
             )
 
             val noteTitle = text_title.text.toString()
@@ -131,13 +130,13 @@ class FragmentArchiveNote : Fragment() {
             updateNote(titleText, noteText)
         } else {
             val sb = Snackbar.make(
-                (requireActivity() as MainActivity).main_activity_parent,
+                (requireActivity() as MainActivity).parent_layout,
                 "Empty note can't be saved!",
                 Snackbar.LENGTH_SHORT
             )
             val sbView = sb.view
             sbView.setBackgroundColor(
-                ContextCompat.getColor(requireContext(), R.color.darkSnackbarColor)
+                ContextCompat.getColor(requireContext(), R.color.darkSnackBarColor)
             )
             sb.show()
         }

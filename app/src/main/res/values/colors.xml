@@ -7,7 +7,8 @@
     <color name="darkGrey">#79889C</color>
     <color name="lightThemeBackground">#FAFAFA</color>
     <color name="lightSnackbarColor">#485567</color>
-    <color name="darkSnackbarColor">#151C25</color>
+    <color name="darkSnackBarColor">#151C25</color>
     <color name="darkToolbarColor">@color/colorPrimary</color>
     <color name="lightToolbarColor">@color/lightThemeBackground</color>
+    <color name="warning">#ff1a1a</color>
 </resources>

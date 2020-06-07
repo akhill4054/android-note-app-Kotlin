@@ -28,12 +28,16 @@
     <fragment
         android:id="@+id/fragmentNote"
         android:name="com.example.notebookapp.fragments_main_activity.FragmentNote"
-        android:label="Edit note" />
+        android:label="Edit note">
+        <argument
+            android:name="position"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentBin"
         android:name="com.example.notebookapp.fragments_main_activity.FragmentBin"
         android:label="Bin"
-        tools:layout="@layout/fragment_bin" >
+        tools:layout="@layout/fragment_bin">
         <action
             android:id="@+id/action_fragmentBin_to_fragmentBinNote"
             app:destination="@id/fragmentBinNote"
@@ -43,7 +47,7 @@
         android:id="@+id/fragmentArchive"
         android:name="com.example.notebookapp.fragments_main_activity.FragmentArchive"
         android:label="Archive"
-        tools:layout="@layout/fragment_archive" >
+        tools:layout="@layout/fragment_archive">
         <action
             android:id="@+id/action_fragmentArchive_to_fragmentArchiveNote"
             app:destination="@id/fragmentArchiveNote"

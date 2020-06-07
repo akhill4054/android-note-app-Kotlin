@@ -64,7 +64,7 @@ interface ArchiveDao {
     @Query("DELETE FROM archive_table")
     suspend fun clear()
 
-    @Query("SELECT * FROM archive_table ORDER BY position DESC")
+    @Query("SELECT * FROM archive_table ORDER BY noteId DESC")
     fun allNotes(): LiveData<List<ArchiveNote>>
 
 }

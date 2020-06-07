@@ -18,6 +18,7 @@ import com.example.notebookapp.viewmodels.SharedNoteViewmodel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_note.*
+import java.text.SimpleDateFormat
 
 
 class FragmentNote : Fragment() {
@@ -26,11 +27,17 @@ class FragmentNote : Fragment() {
     private lateinit var note: Note
     private var hasClickedOnMenuItem = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Passed data
+        test(FragmentNoteArgs.fromBundle(requireArguments()).position.toString())
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        (requireActivity() as MainActivity).hideActionButton()
+        (requireActivity() as MainActivity).hideActionButton(true)
 
         // Setting up the toolbar
         val toolbar = (requireActivity() as MainActivity).toolbar
@@ -42,13 +49,13 @@ class FragmentNote : Fragment() {
         toolbar.setOnMenuItemClickListener { item ->
             // Setting up our snackbar
             val snackbar = Snackbar.make(
-                (requireActivity() as MainActivity).main_activity_parent,
+                (requireActivity() as MainActivity).parent_layout,
                 "",
                 Snackbar.LENGTH_SHORT
             )
             val sbView = snackbar.view
             sbView.setBackgroundColor(
-                ContextCompat.getColor(requireContext(), R.color.darkSnackbarColor)
+                ContextCompat.getColor(requireContext(), R.color.darkSnackBarColor)
             )
 
             val noteTitle = text_title.text.toString()
@@ -127,6 +134,10 @@ class FragmentNote : Fragment() {
         note = viewmodel.allNotes.value!![viewmodel.position]
         text_title.setText(note.title)
         text_note.setText(note.note)
+        val date = note.lastModified
+        val dateString = SimpleDateFormat("dd MMM yyyy").format(date)
+        val timeString = SimpleDateFormat("hh:mm a").format(date)
+        text_edited_on.text = "edited on $dateString at $timeString"
     }
 
     override fun onStop() {
@@ -148,16 +159,25 @@ class FragmentNote : Fragment() {
             updateNote(titleText, noteText)
         } else {
             val sb = Snackbar.make(
-                (requireActivity() as MainActivity).main_activity_parent,
+                (requireActivity() as MainActivity).parent_layout,
                 "Empty note can't be saved!",
                 Snackbar.LENGTH_SHORT
             )
             val sbView = sb.view
             sbView.setBackgroundColor(
-                ContextCompat.getColor(requireContext(), R.color.darkSnackbarColor)
+                ContextCompat.getColor(requireContext(), R.color.darkSnackBarColor)
             )
             sb.show()
         }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+
+        // Passing data to start destination
+        val args = Bundle()
+        args.putString("data", "Hello World!")
+        findNavController().setGraph(R.navigation.nav_graph, args)
     }
 
     private fun updateNote(titleText: String, noteText: String) {
@@ -167,7 +187,9 @@ class FragmentNote : Fragment() {
             note = noteText
         )
 
-        viewmodel.update(note)
+        val oldNote = viewmodel.allNotes.value!![viewmodel.position]
+        if (oldNote.title != note.title || oldNote.note != note.note)
+            viewmodel.update(note)
     }
 
 }

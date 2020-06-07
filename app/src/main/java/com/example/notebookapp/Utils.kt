@@ -26,5 +26,5 @@ fun View.hideKeyboard() {
     imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
-// Logging utlis
-fun test(msg: String) = Log.i("test", msg)
+// Logging util
+fun test(msg: String, tag: String = "test") = Log.i(tag, msg)

@@ -45,7 +45,7 @@ class BinViewmodel(application: Application): AndroidViewModel(application) {
             noteId = binNote.noteId,
             title = binNote.title,
             note = binNote.note,
-            dateTime = binNote.dateTime
+            lastModified = binNote.lastModified
         )
 
         noteRepository.insert(note)
